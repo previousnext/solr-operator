@@ -2,3 +2,6 @@ apiVersion: "solr.skpr.io/v1alpha1"
 kind: "Solr"
 metadata:
   name: "example"
+spec:
+  name: "test"
+  version: "5.x"

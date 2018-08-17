@@ -22,8 +22,10 @@ type Solr struct {
 }
 
 type SolrSpec struct {
-	// Fill me
+	Name 	string
+	Version string
 }
+
 type SolrStatus struct {
 	// Fill me
 }
