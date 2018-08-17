@@ -110,6 +110,12 @@ func provisionDeployment(solr *v1alpha1.Solr) *appsv1.Deployment {
 								"solr:solr",
 								data,
 							},
+							VolumeMounts: []v1.VolumeMount{
+								{
+									Name:      "data",
+									MountPath: data,
+								},
+							},
 						},
 					},
 					Containers: []v1.Container{
