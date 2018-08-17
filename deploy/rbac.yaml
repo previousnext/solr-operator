@@ -20,7 +20,7 @@ rules:
       - configmaps
       - secrets
     verbs:
-  - "*"
+      - "*"
   - apiGroups:
       - apps
     resources:
