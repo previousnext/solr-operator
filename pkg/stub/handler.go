@@ -15,6 +15,7 @@ import (
 	"k8s.io/apimachinery/pkg/util/intstr"
 
 	"github.com/previousnext/solr-operator/pkg/apis/solr/v1alpha1"
+	"github.com/prometheus/common/log"
 )
 
 func NewHandler() sdk.Handler {
@@ -28,14 +29,17 @@ type Handler struct {
 func (h *Handler) Handle(ctx context.Context, event sdk.Event) error {
 	switch o := event.Object.(type) {
 	case *v1alpha1.Solr:
+		log.With("namespace", o.ObjectMeta.Namespace).Infoln("Received solr provisioning request")
 		err := sdk.Create(provisionDeployment(o))
 		if err != nil && !apierrors.IsAlreadyExists(err) {
 			return errors.Wrap(err, "failed to provision deployment")
 		}
+		log.With("namespace", o.ObjectMeta.Namespace).Infoln("Provisioned deployment object")
 		err = sdk.Create(provisionService(o))
 		if err != nil && !apierrors.IsAlreadyExists(err) {
 			return errors.Wrap(err, "failed to provision service")
 		}
+		log.With("namespace", o.ObjectMeta.Namespace).Infoln("Provisioned service object")
 		// @todo add PVC.
 		//err = sdk.Create(provisionPvc(o))
 		//if err != nil && !apierrors.IsAlreadyExists(err) {
@@ -63,7 +67,7 @@ func provisionDeployment(solr *v1alpha1.Solr) *appsv1.Deployment {
 		},
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      fmt.Sprintf("solr-%s", solr.Spec.Name),
-			Namespace: solr.Namespace,
+			Namespace: solr.ObjectMeta.Namespace,
 			OwnerReferences: []metav1.OwnerReference{
 				*metav1.NewControllerRef(solr, schema.GroupVersionKind{
 					Group:   v1alpha1.SchemeGroupVersion.Group,
@@ -89,7 +93,7 @@ func provisionDeployment(solr *v1alpha1.Solr) *appsv1.Deployment {
 					Labels: map[string]string{
 						"solr": solr.Spec.Name,
 					},
-					Namespace: solr.Namespace,
+					Namespace: solr.ObjectMeta.Namespace,
 				},
 				Spec: v1.PodSpec{
 					InitContainers: []v1.Container{
@@ -184,7 +188,7 @@ func provisionService(solr *v1alpha1.Solr) *v1.Service {
 		},
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      fmt.Sprintf("solr-%s", solr.Spec.Name),
-			Namespace: solr.Namespace,
+			Namespace: solr.ObjectMeta.Namespace,
 			OwnerReferences: []metav1.OwnerReference{
 				*metav1.NewControllerRef(solr, schema.GroupVersionKind{
 					Group:   v1alpha1.SchemeGroupVersion.Group,
