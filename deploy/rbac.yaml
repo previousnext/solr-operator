@@ -37,13 +37,8 @@ metadata:
   name: default-account-solr-operator
 subjects:
   - kind: ServiceAccount
-    name: solr-operator
+    name: default
 roleRef:
   kind: Role
   name: solr-operator
   apiGroup: rbac.authorization.k8s.io
----
-kind: ServiceAccount
-apiVersion: v1
-metadata:
-  name: solr-operator
