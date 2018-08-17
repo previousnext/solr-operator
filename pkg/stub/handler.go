@@ -164,10 +164,14 @@ func provisionDeployment(solr *v1alpha1.Solr) *appsv1.Deployment {
 						{
 							Name: "data",
 							VolumeSource: v1.VolumeSource{
-								PersistentVolumeClaim: &v1.PersistentVolumeClaimVolumeSource{
-									ClaimName: solr.Spec.Name,
-								},
+								EmptyDir: &v1.EmptyDirVolumeSource{},
 							},
+							// @todo add PVC
+							//VolumeSource: v1.VolumeSource{
+							//	PersistentVolumeClaim: &v1.PersistentVolumeClaimVolumeSource{
+							//		ClaimName: solr.Spec.Name,
+							//	},
+							//},
 						},
 					},
 				},
