@@ -1,0 +1,3 @@
+apiVersion: solr.skpr.io/v1alpha1
+kind: Solr
+projectName: solr-operator

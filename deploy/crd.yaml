@@ -1,0 +1,13 @@
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  name: solrs.solr.skpr.io
+spec:
+  group: solr.skpr.io
+  names:
+    kind: Solr
+    listKind: SolrList
+    plural: solrs
+    singular: solr
+  scope: Namespaced
+  version: v1alpha1
